@@ -152,3 +152,4 @@ ue4-project-git-initializer.sh
 !*.umap
 
 ## Add your own personal exceptions here ##
+!*.blend
