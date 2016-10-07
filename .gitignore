@@ -153,3 +153,6 @@ ue4-project-git-initializer.sh
 
 ## Add your own personal exceptions here ##
 !*.blend
+
+Content/StarterContent
+
