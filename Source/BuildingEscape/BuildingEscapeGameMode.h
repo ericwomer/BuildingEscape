@@ -2,18 +2,13 @@
 
 #pragma once
 
-#include "GameFramework/GameMode.h"
 #include "BuildingEscapeGameMode.generated.h"
+#include "GameFramework/GameMode.h"
 
 /**
- * 
+ *
  */
 UCLASS()
-class BUILDINGESCAPE_API ABuildingEscapeGameMode : public AGameMode
-{
-	GENERATED_BODY()
-	
-	
-	
-	
+class BUILDINGESCAPE_API ABuildingEscapeGameMode : public AGameMode {
+  GENERATED_BODY()
 };
