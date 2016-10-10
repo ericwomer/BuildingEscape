@@ -22,7 +22,7 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
   Owner = GetOwner();
   
-  FString ObjectName = Owner()->GetName();
+  FString ObjectName = Owner->GetName();
   FString ObjectPos = Owner->GetActorLocation().ToString(); // "X=Something; Y=Something else, etc;";
   FString ObjectRot = Owner->GetTransform().GetRotation().ToString();
   
