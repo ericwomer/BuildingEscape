@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "BuildingEscapeGameMode.generated.h"
 #include "GameFramework/GameMode.h"
+#include "BuildingEscapeGameMode.generated.h"
 
 /**
  *
