@@ -33,21 +33,28 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
   if(PressurePlate->IsOverlappingActor(ActorThatOpens))
   {
     OpenDoor();
+    LastDoorOpenTime = GetWorld()->GetTimeSeconds();
   }
-	// ...
+	// Check to see if its time to close the door.
+  float CurrentTime = GetWorld()->GetTimeSeconds();
+  
+  if((CurrentTime - LastDoorOpenTime) >= DoorCloseDelay)
+  {
+    CloseDoor();
+  }
+  
 }
 
 void UOpenDoor::OpenDoor()
 {
+  // Set the door rotation
+  Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
+
+}
+
+void UOpenDoor::CloseDoor()
+{
+  // Set the door rotation
+  Owner->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
   
-  /*FString ObjectName = Owner->GetName();
-  FString ObjectPos = Owner->GetActorLocation().ToString(); // "X=Something; Y=Something else, etc;";
-  FString ObjectRot = Owner->GetTransform().GetRotation().ToString();*/
-  
-  FRotator NewRotation = FRotator(0.0f, -90.0f, 0.0f);
-  
-  // UE_LOG(LogTemp, Warning, TEXT("%s is at %s, rotation is %s"), *ObjectName, *ObjectPos, *ObjectRot);
-	// ...
-  
-  Owner->SetActorRotation(NewRotation);
 }
