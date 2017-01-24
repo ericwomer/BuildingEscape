@@ -33,8 +33,7 @@ private:
   UPROPERTY(EditAnywhere)
   ATriggerVolume* PressurePlate;
   
-  /* UPROPERTY(EditAnywhere) // take away for now
-   * */
+  UPROPERTY(EditAnywhere)
   AActor* ActorThatOpens;
 	
 };
