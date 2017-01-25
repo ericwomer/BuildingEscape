@@ -34,4 +34,6 @@ private:
   // Raycast and grab whats in reach
   void Grab();
   
+  // If object in possession, release that object.
+  void Release();
 };

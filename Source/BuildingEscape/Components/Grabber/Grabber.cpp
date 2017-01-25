@@ -36,6 +36,7 @@ void UGrabber::BeginPlay()
     // Bind input action to a method
     // Add a way for pressing to grab and then pressing again to release.
     InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+    InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
   }
   else
   {
@@ -98,4 +99,9 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 void UGrabber::Grab()
 {
   UE_LOG(LogTemp, Warning, TEXT("%s: grab"), *(GetOwner()->GetName()));
+}
+
+void UGrabber::Release()
+{
+  UE_LOG(LogTemp, Warning, TEXT("%s: release"), *(GetOwner()->GetName()));
 }
