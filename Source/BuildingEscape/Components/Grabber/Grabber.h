@@ -28,7 +28,7 @@ private:
   UPROPERTY(EditAnyWhere)
   float LineReachEnd = 100.0f;
   
-  UPhysicsHandleComponent 
+  UPhysicsHandleComponent* PhysicsHandle = nullptr; 
 		
 	
 };
