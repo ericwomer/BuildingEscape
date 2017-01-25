@@ -30,6 +30,31 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+  
+  /// *** TEMP
+  FVector PlayerViewPointLocation;
+  FRotator PlayerViewPointRotation;
+
+  GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+    OUT PlayerViewPointLocation,
+    OUT PlayerViewPointRotation
+  );
+  
+/*  UE_LOG(LogTemp, Warning, TEXT("Location: %s Rotation: %s"), 
+    *PlayerViewPointLocation.ToString(),
+    *PlayerViewPointRotation.ToString()
+  )*/
+  
+  FVector LineTraceDirection = PlayerViewPointRotation.Vector();
+  FVector LineTraceEnd = PlayerViewPointLocation + (LineTraceDirection * LineReachEnd);
+  
+  /// *** END TEMP
+  
+  if(PhysicsHandle->GetGrabbedComponent())
+  {
+    PhysicsHandle->SetTargetLocation(LineTraceEnd);
+    PhysicsHandle->SetTargetRotation(PlayerViewPointRotation);
+  }
 
 }
 
@@ -37,12 +62,30 @@ void UGrabber::Grab()
 {
   UE_LOG(LogTemp, Warning, TEXT("%s: grab"), *(GetOwner()->GetName()));
   
-  GetFirstPhysicsBodyInReach();
+  FHitResult HitResult = GetFirstPhysicsBodyInReach();
+  auto ComponentToGrab = HitResult.GetComponent();
+  auto ActorHit = HitResult.GetActor();
+  
+  if(ActorHit)
+  {
+    PhysicsHandle->GrabComponentAtLocationWithRotation(
+      ComponentToGrab,
+      NAME_None,
+      ComponentToGrab->GetOwner()->GetActorLocation(),
+      ComponentToGrab->GetOwner()->GetActorRotation()
+    );
+  }
+  
 }
 
 void UGrabber::Release()
 {
   UE_LOG(LogTemp, Warning, TEXT("%s: release"), *(GetOwner()->GetName()));
+  
+  if(PhysicsHandle->GetGrabbedComponent())
+  {
+    PhysicsHandle->ReleaseComponent();
+  }
 }
 
 void UGrabber::FindPhysicsHandleComponent()
