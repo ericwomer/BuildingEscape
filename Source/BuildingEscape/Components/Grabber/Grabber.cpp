@@ -39,7 +39,24 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
     OUT PlayerViewPointRotation
   );
   
-  UE_LOG(LogTemp, Warning, TEXT("Location: %s Rotation: %s"), *PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.ToString());
+/*  UE_LOG(LogTemp, Warning, TEXT("Location: %s Rotation: %s"), 
+    *PlayerViewPointLocation.ToString(),
+    *PlayerViewPointRotation.ToString()
+  )*/
+  
+  FVector LineTraceDirection = PlayerViewPointRotation.Vector();
+  FVector LineTraceEnd = PlayerViewPointLocation + (LineTraceDirection * LineReachEnd);
+  
+  DrawDebugLine(
+    GetWorld(),
+    PlayerViewPointLocation,
+    LineTraceEnd,
+    FColor(255, 0, 0),
+    false,
+    0.0f,
+    0.0f,
+    10.0f
+  );
 	// ...
 }
 
