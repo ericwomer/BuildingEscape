@@ -15,21 +15,49 @@ UGrabber::UGrabber()
 	// ...
 }
 
-
 // Called when the game starts
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
   // UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
   
+  FindPhysicsHandleComponent();
+  SetupInputComponent();
+  
+}
+
+// Called every frame
+void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+}
+
+void UGrabber::Grab()
+{
+  UE_LOG(LogTemp, Warning, TEXT("%s: grab"), *(GetOwner()->GetName()));
+  
+  GetFirstPhysicsBodyInReach();
+}
+
+void UGrabber::Release()
+{
+  UE_LOG(LogTemp, Warning, TEXT("%s: release"), *(GetOwner()->GetName()));
+}
+
+void UGrabber::FindPhysicsHandleComponent()
+{
   // Look for attached physics handle
   PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
   if(!PhysicsHandle)
   {
     UE_LOG(LogTemp, Error, TEXT("%s, failed to aquire UPhysicsHandleComponent!"), *(GetOwner()->GetName()))
   }
-  
-  InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+}
+
+void UGrabber::SetupInputComponent()
+{
+    InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
   if(InputComponent)
   {
     UE_LOG(LogTemp, Warning, TEXT("%s, aquired UInputComponent."), *(GetOwner()->GetName()))
@@ -42,13 +70,12 @@ void UGrabber::BeginPlay()
   {
     UE_LOG(LogTemp, Error, TEXT("%s, failed to aquire UInputComponent!"), *(GetOwner()->GetName()))
   }
-	
 }
 
-// Called every frame
-void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+//
+const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
   FVector PlayerViewPointLocation;
   FRotator PlayerViewPointRotation;
 
@@ -65,7 +92,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
   FVector LineTraceDirection = PlayerViewPointRotation.Vector();
   FVector LineTraceEnd = PlayerViewPointLocation + (LineTraceDirection * LineReachEnd);
   
-  DrawDebugLine(
+/*  DrawDebugLine(
     GetWorld(),
     PlayerViewPointLocation,
     LineTraceEnd,
@@ -74,7 +101,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
     0.0f,
     0.0f,
     10.0f
-  );
+  );*/
 
   // Set up collisions parameters
   FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
@@ -82,11 +109,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
   // Line trace/ray cast out to distance
   FHitResult Hit;
   GetWorld()->LineTraceSingleByObjectType(
-  OUT Hit,
-  PlayerViewPointLocation,
-  LineTraceEnd,
-  FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
-  TraceParameters
+    OUT Hit,
+    PlayerViewPointLocation,
+    LineTraceEnd,
+    FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+    TraceParameters
   );
   
   AActor *ActorHit = Hit.GetActor();
@@ -94,14 +121,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
   {
     UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *(ActorHit->GetName()));
   }
-}
-
-void UGrabber::Grab()
-{
-  UE_LOG(LogTemp, Warning, TEXT("%s: grab"), *(GetOwner()->GetName()));
-}
-
-void UGrabber::Release()
-{
-  UE_LOG(LogTemp, Warning, TEXT("%s: release"), *(GetOwner()->GetName()));
+  
+  return Hit;
 }

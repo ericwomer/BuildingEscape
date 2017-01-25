@@ -36,4 +36,13 @@ private:
   
   // If object in possession, release that object.
   void Release();
+  
+  // Find (assumed) attached UPhysicsHandleComponent
+  void FindPhysicsHandleComponent();
+  
+  // Setup (assumed) attached UInputComponent
+  void SetupInputComponent();
+  
+  // Return hit for first physics body in reach
+  const FHitResult GetFirstPhysicsBodyInReach();
 };
