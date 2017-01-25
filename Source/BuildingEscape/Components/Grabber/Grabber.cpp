@@ -28,9 +28,21 @@ void UGrabber::BeginPlay()
   {
     UE_LOG(LogTemp, Error, TEXT("%s, failed to aquire UPhysicsHandleComponent!"), *(GetOwner()->GetName()))
   }
+  
+  InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+  if(InputComponent)
+  {
+    UE_LOG(LogTemp, Warning, TEXT("%s, aquired UInputComponent."), *(GetOwner()->GetName()))
+    // Bind input action to a method
+    // Add a way for pressing to grab and then pressing again to release.
+    InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+  }
+  else
+  {
+    UE_LOG(LogTemp, Error, TEXT("%s, failed to aquire UInputComponent!"), *(GetOwner()->GetName()))
+  }
 	
 }
-
 
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -83,3 +95,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
   }
 }
 
+void UGrabber::Grab()
+{
+  UE_LOG(LogTemp, Warning, TEXT("%s: grab"), *(GetOwner()->GetName()));
+}

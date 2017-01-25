@@ -28,7 +28,10 @@ private:
   UPROPERTY(EditAnyWhere)
   float LineReachEnd = 100.0f;
   
-  UPhysicsHandleComponent* PhysicsHandle = nullptr; 
-		
-	
+  UPhysicsHandleComponent* PhysicsHandle = nullptr;
+  UInputComponent* InputComponent = nullptr;
+  
+  // Raycast and grab whats in reach
+  void Grab();
+  
 };
