@@ -20,7 +20,7 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-  UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
+  // UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
   
 	// ...
 	
@@ -57,6 +57,24 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
     0.0f,
     10.0f
   );
-	// ...
+
+  // Set up collisions parameters
+  FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+  
+  // Line trace/ray cast out to distance
+  FHitResult Hit;
+  GetWorld()->LineTraceSingleByObjectType(
+  OUT Hit,
+  PlayerViewPointLocation,
+  LineTraceEnd,
+  FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+  TraceParameters
+  );
+  
+  AActor *ActorHit = Hit.GetActor();
+  if(ActorHit) 
+  {
+    UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *(ActorHit->GetName()));
+  }
 }
 
