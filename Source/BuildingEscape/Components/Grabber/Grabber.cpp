@@ -24,7 +24,8 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-    
+  
+  if(!PhysicsHandle) { return; }
   if(PhysicsHandle->GetGrabbedComponent())
   {
     PhysicsHandle->SetTargetLocation(GetReachLineEnd());
@@ -39,6 +40,7 @@ void UGrabber::Grab()
   
   if(ActorHit)
   {
+    if(!PhysicsHandle) { return; }
     PhysicsHandle->GrabComponent( // AtLocationWithRotation(
       ComponentToGrab,
       NAME_None, // No bones needed.
@@ -50,6 +52,7 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
+  if(!PhysicsHandle) { return; }
   PhysicsHandle->ReleaseComponent();
 }
 

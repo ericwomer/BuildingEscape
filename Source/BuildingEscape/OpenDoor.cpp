@@ -23,8 +23,17 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
   
   Owner = GetOwner();
+  if(!Owner)
+  {
+    UE_LOG(LogTemp, Error, TEXT("Failed to set owner!"))
+  }
+  
+  if(!PressurePlate)
+  {
+    UE_LOG(LogTemp, Error, TEXT("%s missing PressurePlate!"), *GetOwner()->GetName())
+  }
+  
 }
-
 
 // Called every frame
 void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
@@ -65,6 +74,8 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
   float TotalMass = 0.0f;
   // Find array of overlapping actors
   TArray<AActor*> OverlappingActors;
+  
+  if(!PressurePlate){ return TotalMass; }  
   PressurePlate->GetOverlappingActors(OUT OverlappingActors);
   
   for(const auto* Actor : OverlappingActors)
