@@ -31,7 +31,7 @@ public:
 private:
 
   UPROPERTY(EditAnyWhere)
-  float LineReachEnd = 100.0f;
+  float Reach = 100.0f;
   
   UPhysicsHandleComponent* PhysicsHandle = nullptr;
   UInputComponent* InputComponent = nullptr;
@@ -51,6 +51,9 @@ private:
   // Return hit for first physics body in reach
   const FHitResult GetFirstPhysicsBodyInReach();
   
-  // Attach the actor in reach to the PhysicsHandle Component
-  void AttachActorToPhysicsHandle();
+  // Get current start of reach line
+  FVector GetReachLineStart();
+  
+  // Get current end of reach line
+  FVector GetReachLineEnd();
 };
