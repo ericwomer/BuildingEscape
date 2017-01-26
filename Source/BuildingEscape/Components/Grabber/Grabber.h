@@ -5,6 +5,11 @@
 #include "Components/ActorComponent.h"
 #include "Grabber.generated.h"
 
+// TODO: Toss object with left mouse button, with direction and force.
+// Leave objects rotaion to where it is.
+// Rotate object with mouse key, may have to use a toggle system
+//  may have to rotate the object its self on its local axis(?)
+// Set/drop with right mouse.
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UGrabber : public UActorComponent
@@ -45,4 +50,7 @@ private:
   
   // Return hit for first physics body in reach
   const FHitResult GetFirstPhysicsBodyInReach();
+  
+  // Attach the actor in reach to the PhysicsHandle Component
+  void AttachActorToPhysicsHandle();
 };

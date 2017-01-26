@@ -11,7 +11,6 @@ UGrabber::UGrabber()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
 	// ...
 }
 
@@ -23,37 +22,16 @@ void UGrabber::BeginPlay()
   
   FindPhysicsHandleComponent();
   SetupInputComponent();
-  
 }
 
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-  
-  /// *** TEMP
-  FVector PlayerViewPointLocation;
-  FRotator PlayerViewPointRotation;
-
-  GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-    OUT PlayerViewPointLocation,
-    OUT PlayerViewPointRotation
-  );
-  
-/*  UE_LOG(LogTemp, Warning, TEXT("Location: %s Rotation: %s"), 
-    *PlayerViewPointLocation.ToString(),
-    *PlayerViewPointRotation.ToString()
-  )*/
-  
-  FVector LineTraceDirection = PlayerViewPointRotation.Vector();
-  FVector LineTraceEnd = PlayerViewPointLocation + (LineTraceDirection * LineReachEnd);
-  
-  /// *** END TEMP
-  
+    
   if(PhysicsHandle->GetGrabbedComponent())
   {
-    PhysicsHandle->SetTargetLocation(LineTraceEnd);
-    PhysicsHandle->SetTargetRotation(PlayerViewPointRotation);
+    AttachActorToPhysicsHandle();
   }
 
 }
@@ -126,26 +104,10 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
     OUT PlayerViewPointLocation,
     OUT PlayerViewPointRotation
   );
-  
-/*  UE_LOG(LogTemp, Warning, TEXT("Location: %s Rotation: %s"), 
-    *PlayerViewPointLocation.ToString(),
-    *PlayerViewPointRotation.ToString()
-  )*/
-  
+
   FVector LineTraceDirection = PlayerViewPointRotation.Vector();
   FVector LineTraceEnd = PlayerViewPointLocation + (LineTraceDirection * LineReachEnd);
   
-/*  DrawDebugLine(
-    GetWorld(),
-    PlayerViewPointLocation,
-    LineTraceEnd,
-    FColor(255, 0, 0),
-    false,
-    0.0f,
-    0.0f,
-    10.0f
-  );*/
-
   // Set up collisions parameters
   FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
   
@@ -159,11 +121,24 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
     TraceParameters
   );
   
-  AActor *ActorHit = Hit.GetActor();
-  if(ActorHit) 
-  {
-    UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *(ActorHit->GetName()));
-  }
-  
   return Hit;
+}
+
+void UGrabber::AttachActorToPhysicsHandle()
+{
+  
+  FVector PlayerViewPointLocation;
+  FRotator PlayerViewPointRotation;
+
+  GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+    OUT PlayerViewPointLocation,
+    OUT PlayerViewPointRotation
+  );
+
+  FVector LineTraceDirection = PlayerViewPointRotation.Vector();
+  FVector LineTraceEnd = PlayerViewPointLocation + (LineTraceDirection * LineReachEnd);
+  
+  PhysicsHandle->SetTargetLocation(LineTraceEnd);
+  PhysicsHandle->SetTargetRotation(PlayerViewPointRotation);
+
 }
