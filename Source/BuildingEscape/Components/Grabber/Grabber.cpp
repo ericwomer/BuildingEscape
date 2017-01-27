@@ -41,12 +41,12 @@ void UGrabber::Grab()
   if(ActorHit)
   {
     if(!PhysicsHandle) { return; }
-    PhysicsHandle->GrabComponent( // AtLocationWithRotation(
+    PhysicsHandle->GrabComponentAtLocation( // WithRotation(
       ComponentToGrab,
       NAME_None, // No bones needed.
-      ComponentToGrab->GetOwner()->GetActorLocation(),
-      true // ComponentToGrab->GetOwner()->GetActorRotation()
-    );
+      ComponentToGrab->GetOwner()->GetActorLocation()
+    ); //true // ComponentToGrab->GetOwner()->GetActorRotation()
+    // );
   }
 }
 
