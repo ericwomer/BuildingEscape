@@ -155,3 +155,4 @@ ue4-project-git-initializer.sh
 !*.blend
 !UE4Editor-working-commit
 
+Content/StarterContent
